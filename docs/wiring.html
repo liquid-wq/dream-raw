@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DREAM-RAW — Building the serial cable</title>
+<meta name="author" content="Liqui">
+<meta name="description" content="DREAM-RAW brings RetroAchievements to real Sega Dreamcast hardware with a GDEMU and a serial cable. No emulator, no patched disc images. Free to use.">
+<link rel="canonical" href="https://liquid-wq.github.io/dream-raw/wiring.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DREAM-RAW">
+<meta property="og:title" content="DREAM-RAW — RetroAchievements on Real Sega Dreamcast Hardware">
+<meta property="og:description" content="Earn RetroAchievements while playing on an actual Sega Dreamcast, with a GDEMU and a serial cable. No emulator, no patched disc images.">
+<meta property="og:url" content="https://liquid-wq.github.io/dream-raw/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DREAM-RAW — RetroAchievements on Real Sega Dreamcast Hardware">
+<meta name="twitter:description" content="Earn RetroAchievements while playing on an actual Sega Dreamcast, with a GDEMU.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>:root{
+  --bg:#05070b;
+  --bg-card:#110c09;
+  --line:#24180f;
+  --line-hot:#4a2c1c;
+  --blue:#ff8a3d;
+  --blue-dim:#a86a44;
+  --gold:#ffd28a;
+  --ink:#e2dad0;
+  --ink-dim:#8f7f70;
+  --maxw:960px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:'JetBrains Mono',ui-monospace,'IBM Plex Mono',monospace;
+  font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
+  position:relative;overflow-x:hidden;
+}
+
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9;
+  background:repeating-linear-gradient(
+    to bottom,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.28) 2px 3px);
+  mix-blend-mode:multiply;
+}
+
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:8;
+  background:radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(0,0,0,.55) 100%);
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px;position:relative;z-index:1}
+
+a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+
+.eyebrow{
+  font-size:13px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--blue-dim);margin:0;
+}
+.eyebrow .slash{color:var(--gold);font-weight:700}
+.eyebrow em{font-style:normal;color:var(--blue)}
+h2{
+  font-size:clamp(19px,3.2vw,26px);letter-spacing:.14em;text-transform:uppercase;
+  font-weight:500;color:var(--ink-dim);margin:52px 0 26px;
+}
+h2::before{content:'# ';color:var(--gold);font-weight:700}
+
+
+.hero{padding:54px 0 20px}
+
+.logo{
+  font-family:'Press Start 2P',monospace;
+  font-size:clamp(28px,7.4vw,64px);line-height:1.15;letter-spacing:.02em;
+  margin:22px 0 0;position:relative;display:inline-block;
+  color:var(--blue);
+  text-shadow:0 0 8px rgba(255,138,61,.55),0 0 26px rgba(255,138,61,.3);
+  animation:crt-on 1s cubic-bezier(.2,.7,.3,1) both,flicker 7s 1.1s infinite steps(1);
+}
+@keyframes crt-on{
+  0%{transform:scaleY(.012) scaleX(1.25);filter:brightness(3);opacity:0}
+  22%{transform:scaleY(.012) scaleX(1.25);filter:brightness(3);opacity:1}
+  55%{transform:scaleY(1) scaleX(1);filter:brightness(1.7)}
+  100%{transform:scaleY(1) scaleX(1);filter:brightness(1)}
+}
+@keyframes flicker{0%,96%,100%{opacity:1}97%{opacity:.82}98%{opacity:1}99%{opacity:.9}}
+
+
+.logo__ring{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,
+    transparent 0%,transparent 38%,
+    #ffd28a 46%,#fff1dc 50%,#ffd28a 54%,
+    transparent 62%,transparent 100%);
+  background-size:260% 100%;background-repeat:no-repeat;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  animation:ring 6.5s 1.4s cubic-bezier(.45,0,.55,1) infinite;
+  text-shadow:none;
+}
+@keyframes ring{
+  0%{background-position:120% 0;opacity:0}
+  8%{opacity:1}
+  46%{background-position:-20% 0;opacity:1}
+  54%{background-position:-20% 0;opacity:0}
+  100%{background-position:-20% 0;opacity:0}
+}
+@media (prefers-reduced-motion:reduce){
+  .logo{animation:none}
+  .logo__ring{display:none}
+}
+.lede{
+  font-size:clamp(17px,2.3vw,21px);line-height:1.75;max-width:52ch;margin:30px 0 0;
+}
+.lede b{color:var(--blue);font-weight:500}
+.lede .hot{color:var(--gold);font-weight:500}
+
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;margin:34px 0 0}
+.btn{
+  display:inline-block;padding:14px 26px;text-decoration:none;font-size:15px;
+  border:1px solid var(--line-hot);color:var(--ink-dim);background:transparent;
+  transition:color .14s,border-color .14s,box-shadow .14s;
+}
+.btn:hover{color:var(--blue);border-color:var(--blue);box-shadow:0 0 14px rgba(255,138,61,.18)}
+.btn--go{color:var(--blue);border-color:var(--blue)}
+.btn--go:hover{box-shadow:0 0 20px rgba(255,138,61,.3)}
+
+
+.diagram{
+  margin:52px 0 0;border:1px solid var(--line);background:var(--bg-card);padding:20px 18px 8px;
+}
+.diagram__title{font-size:13px;color:var(--ink-dim);letter-spacing:.06em;margin:0 0 6px}
+.diagram svg{width:100%;height:auto;display:block}
+.lane-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:var(--ink-dim);letter-spacing:.08em}
+.node-label{font-family:'JetBrains Mono',monospace;font-size:9px;fill:var(--blue-dim);letter-spacing:.06em}
+.wire{stroke:var(--line-hot);stroke-width:1;fill:none}
+.wire--live{stroke:var(--blue);stroke-width:1;opacity:.55}
+.dot{fill:var(--blue)}
+.pulse{fill:var(--gold)}
+
+
+.cards{display:grid;gap:16px;margin:28px 0 0}
+@media(min-width:740px){.cards--2{grid-template-columns:1fr 1fr}}
+.card{border:1px solid var(--line);background:var(--bg-card);padding:22px 22px 24px}
+.card h3{font-size:16px;color:var(--blue);font-weight:500;margin:0 0 10px;letter-spacing:.02em}
+.card p{margin:0;color:var(--ink-dim);font-size:14.5px;line-height:1.7}
+.card--hot{border-color:var(--line-hot)}
+.card--hot h3{color:var(--gold)}
+
+p.body{max-width:64ch;margin:0 0 22px}
+p.body b{color:var(--ink);font-weight:500}
+p.body a{color:var(--blue);text-decoration:none;border-bottom:1px solid var(--line-hot)}
+p.body a:hover{border-color:var(--blue)}
+
+
+.tag{
+  display:inline-block;border:1px solid var(--gold);color:var(--gold);
+  padding:7px 14px;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
+  margin:44px 0 0;
+}
+
+
+.spec{margin:0;border:1px solid var(--line);background:var(--bg-card)}
+.spec div{display:grid;grid-template-columns:180px 1fr;gap:14px;padding:13px 20px;border-bottom:1px solid var(--line)}
+.spec div:last-child{border-bottom:none}
+.spec dt{margin:0;color:var(--ink-dim);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.spec dd{margin:0;font-size:15px;color:var(--ink)}
+@media(max-width:620px){.spec div{grid-template-columns:1fr;gap:2px}}
+
+
+.dl h3{font-size:17px;color:var(--gold);margin:0 0 12px;font-weight:500}
+.dl p{color:var(--ink-dim);font-size:14.5px;line-height:1.7;margin:0 0 18px}
+.dl p b{color:var(--ink);font-weight:500}
+.dl a{color:var(--blue);font-size:14.5px;text-decoration:none;border-bottom:1px solid var(--line-hot)}
+.dl a:hover{border-color:var(--blue)}
+
+figure{margin:26px 0 0}
+figure img{width:100%;border:1px solid var(--line);display:block;background:#fff}
+figure video{width:100%;border:1px solid var(--line);display:block;background:#000}
+figcaption{color:var(--ink-dim);font-size:13px;margin-top:12px}
+
+.parts{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:520px;margin-top:8px}
+.parts figure{margin:0}
+.parts img{width:100%;height:260px;object-fit:cover;background:#000}
+footer{border-top:1px solid var(--line);margin-top:70px;padding:38px 0 64px;color:var(--ink-dim);font-size:14.5px}
+footer p{max-width:64ch;margin:0 0 12px}
+footer a{color:var(--blue);text-decoration:none;border-bottom:1px solid var(--line-hot)}
+footer a:hover{border-color:var(--blue)}
+
+  
+  .back{position:fixed;top:14px;left:16px;z-index:10;font-size:13px;letter-spacing:.06em;color:var(--blue-dim);text-decoration:none;border:1px solid var(--line-hot);background:rgba(5,7,11,.85);padding:6px 12px;transition:color .14s,border-color .14s}
+  .back:hover,.back:focus-visible{color:var(--blue);border-color:var(--blue)}
+.steps{margin:0 0 22px;padding-left:22px;max-width:64ch}
+.steps li{margin:0 0 8px}
+.steps b{color:var(--ink);font-weight:500}
+</style>
+</head>
+<body>
+<a class="back" href="index.html" aria-label="Back to DREAM-RAW">&larr; DREAM-RAW</a>
+
+<main class="wrap">
+  <section class="hero" style="padding-bottom:0">
+    <p class="eyebrow"><span class="slash">//</span> <em>DREAM-RAW</em> &middot; <em>Serial cable</em></p>
+    <h2 style="margin-top:26px">Building the serial cable</h2>
+    <p class="body">
+      DREAM-RAW talks to the Dreamcast through a cable on the console's serial port, often
+      called a Coder's Cable. If you already have one with a 3.3 V USB-to-serial adapter and
+      the RTS and CTS lines, you can skip this page. Otherwise you need two parts and five
+      wires: a plug for the serial port and a small USB-to-serial board. This page shows how
+      I built mine. <b>The parts are an example, not a requirement.</b>
+    </p>
+  </section>
+
+  <section>
+    <h2>The parts I used</h2>
+    <div class="parts">
+      <figure><img src="wiring_plug.jpg" alt="SD card adapter for the Dreamcast, used as the plug"><figcaption>The plug: an SD card adapter for the serial port ("DC_SD_Adapter"); the card slot comes off before soldering</figcaption></figure>
+      <figure><img src="wiring_usb.jpg" alt="Adafruit CP2102N Friend"><figcaption>The USB board: Adafruit CP2102N Friend</figcaption></figure>
+    </div>
+    <p class="body" style="margin-top:22px">
+      Any plug that fits the serial port works. For the USB board I recommend one with a
+      <b>CP2102N</b> chip; other boards work as long as they run at <b>3.3 V</b> and bring out
+      <b>RTS and CTS</b>. Never use a 5 V adapter: the Dreamcast's serial port works with 3.3 V.
+    </p>
+    <p class="body">
+      You also need thin stranded wire in five colours, a soldering iron with a fine tip, thin
+      solder, flux, a multimeter, Kapton or insulating tape and hot glue.
+    </p>
+  </section>
+
+  <section>
+    <h2>The plug</h2>
+    <p class="body">
+      Hold the plug with the contacts pointing up and look straight at one side. Each side has
+      seven legs: a wide shield leg on the outside of each end and five signal legs in between.
+      On the adapter I used, the side with the parts R1, C1 and C2 carries the odd pins, the side
+      with D1 the even pins. Check this on yours with a multimeter: pin 3 is ground.
+    </p>
+    <figure><img src="wiring_r1.jpg" alt="Odd side of the plug with pins 9, 7, 5, 3 and 1"></figure>
+    <figure><img src="wiring_d1.jpg" alt="Even side of the plug with pins 2, 4, 6, 8 and 10"></figure>
+    <ul class="steps" style="margin-top:24px">
+      <li>Pin 3, ground &rarr; <b>GND</b> on the board (black)</li>
+      <li>Pin 5, where the Dreamcast sends &rarr; <b>RXD</b> on the board (purple)</li>
+      <li>Pin 7 &rarr; <b>RTS</b> on the board (blue)</li>
+      <li>Pin 4, where the Dreamcast receives &rarr; <b>TXD</b> on the board (grey)</li>
+      <li>Pin 6 &rarr; <b>CTS</b> on the board (white)</li>
+    </ul>
+    <p class="body">
+      Send and receive cross over, and so do RTS and CTS. Leave every other leg free, above all
+      pin 1 (+5 V) and pin 10 (+3.3 V).
+    </p>
+  </section>
+
+  <section>
+    <h2>The USB board</h2>
+    <figure style="max-width:380px"><img src="wiring_board.jpg" alt="The five wires on the bottom row of the CP2102N board"></figure>
+    <p class="body" style="margin-top:22px">
+      On the Adafruit board the five wires go to the bottom row (USB-C at the top): GND, CTS,
+      TXD, RXD and RTS. The 5V hole in that row stays free, and so do the 5V and 3V holes
+      elsewhere. The board is powered over USB. On another board, use the holes with the same
+      names.
+    </p>
+  </section>
+
+  <section>
+    <h2>Checking it</h2>
+    <p class="body">Before the first use, with the Dreamcast switched off:</p>
+    <ol class="steps">
+      <li>Check continuity of each of the five wires, from leg to hole.</li>
+      <li>Check that there is no continuity between neighbouring legs.</li>
+      <li>Plug the board into the PC alone. A CP2102N board shows up in the Device Manager as a
+        &ldquo;Silicon Labs CP210x&rdquo; COM port.</li>
+    </ol>
+    <p class="body">
+      Then plug the cable into the Dreamcast, start DREAM-RAW and switch the console on. As soon
+      as the program says that the Dreamcast is in the DC-RAW menu, the line from the console to
+      the PC works. Pressing Start in the DC-RAW menu runs a cable test; the full result appears
+      in the log of the program.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><a href="index.html">Back to DREAM-RAW</a></p>
+    <p>Built by <a href="https://github.com/liquid-wq">Liqui</a>.</p>
+  </div>
+</footer>
+
+</body>
+</html>

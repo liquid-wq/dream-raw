@@ -1,0 +1,7 @@
+// Console menu program, embedded at build time.
+
+#include <cstddef>
+#include <cstdint>
+
+extern const uint8_t kDreamRawProgramm[] = {@DREAMRAW_BYTES@ 0};
+extern const size_t kDreamRawGroesse = @DREAMRAW_GROESSE@;

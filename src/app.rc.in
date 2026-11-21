@@ -1,0 +1,5 @@
+// Program icon and images.
+
+1 ICON "@APP_ICON_PFAD@"
+
+300 RCDATA "@JASON_PFAD@"

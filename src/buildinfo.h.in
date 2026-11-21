@@ -1,0 +1,12 @@
+// Build number.
+
+#pragma once
+
+namespace buildinfo {
+
+constexpr int kBuild = @BUILD_NR@;
+constexpr const char* kBuildDate = "@BUILD_DATUM@";
+
+const char* string();
+
+}
